@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E-Filing Demo</title>
+    <link rel="icon" href="Jurisight.png" />
+    <link href="draft.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <div class="container">
+      <h2>Quick E-Filing</h2>
+
+      <label for="name">Full Name:</label>
+      <input type="text" id="name" placeholder="Enter your full name" />
+
+      <label for="gender">Gender:</label>
+      <select id="gender">
+        <option>Male</option>
+        <option>Female</option>
+        <option>Other</option>
+      </select>
+
+      <label for="case-type">Case Type:</label>
+      <select id="case-type">
+        <option>WP(C) - Writ Petition (Civil)</option>
+        <option>Habeas Corpus</option>
+        <option>Mandamus</option>
+        <option>Certiorari</option>
+        <option>Prohibition</option>
+        <option>Quo-Warranto</option>
+      </select>
+
+      <label for="subject">Subject:</label>
+      <select id="subject">
+        <option>Habeas Corpus</option>
+        <option>Mandamus</option>
+        <option>Certiorari</option>
+        <option>Prohibition</option>
+        <option>Quo-Warranto</option>
+      </select>
+
+      <label>Whether Accused/Petitioner/Appellant in Custody:</label>
+      <div class="radio-group">
+        <input type="radio" name="custody" value="yes" /> Yes
+        <input type="radio" name="custody" value="no" checked /> No
+      </div>
+
+      <label>Crime Registered:</label>
+      <div class="radio-group">
+        <input type="radio" name="crime" value="yes" /> Yes
+        <input type="radio" name="crime" value="no" checked /> No
+      </div>
+
+      <label>Application Filing (Crl.M.Appl / IA):</label>
+      <div class="radio-group">
+        <input type="radio" name="application" value="yes" /> Yes
+        <input type="radio" name="application" value="no" checked /> No
+      </div>
+
+      <label for="address">Address:</label>
+      <input type="text" id="address" placeholder="Enter your address" />
+
+      <label for="pincode">Pincode:</label>
+      <input type="text" id="pincode" placeholder="Enter pincode" />
+
+      <label for="num-applications">Number of Applications:</label>
+      <input
+        type="text"
+        id="num-applications"
+        placeholder="Enter number of applications"
+      />
+
+      <button onclick="submitForm()">Submit</button>
+    </div>
+
+    <script>
+      function fetchAndFillForm() {
+        const data = JSON.parse(localStorage.getItem("formData"));
+
+        if (!data) {
+          console.error("No form data found in localStorage.");
+          return;
+        }
+
+        // Correct mapping between extracted JSON keys and form field IDs
+        const formMappings = {
+          "Client Name": "name",
+          "Gender": "gender",
+          "Matter": "case-type",
+          "Client's Objectives": "subject",
+          "Facts.Documentation": "address",
+          "Facts.Additional Amount Demanded": "pincode",
+          "Legal Analysis.Next Steps": "num-applications",
+        };
+
+        for (const jsonKey in formMappings) {
+          let fieldId = formMappings[jsonKey];
+          let field = document.getElementById(fieldId);
+
+          console.log(`Trying to fill ${fieldId} with ${data[jsonKey]}`);
+
+          if (field && data[jsonKey]) {
+            if (field.tagName === "INPUT") {
+              field.value = data[jsonKey];
+            } else if (field.tagName === "SELECT") {
+              for (const option of field.options) {
+                if (option.text.toLowerCase() === data[jsonKey].toLowerCase()) {
+                  option.selected = true;
+                  break;
+                }
+              }
+            }
+          }
+        }
+
+        // Autofill radio buttons
+        const radioMappings = {
+          "custody": "Whether Accused/Petitioner/Appellant in Custody",
+          "crime": "Facts.Contract Terms",
+          "application": "Legal Analysis.Potential Breach",
+        };
+
+        for (const fieldName in radioMappings) {
+          let radioValue = data[radioMappings[fieldName]];
+          let radioButtons = document.getElementsByName(fieldName);
+
+          if (radioButtons.length > 0 && radioValue) {
+            for (const button of radioButtons) {
+              if (button.value.toLowerCase() === radioValue.toLowerCase()) {
+                button.checked = true;
+                break;
+              }
+            }
+          }
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", fetchAndFillForm);
+      function submitForm() {
+        alert("Form submitted successfully!");
+      }
+    </script>
+  </body>
+</html>
