@@ -17,9 +17,11 @@ load_dotenv()
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
-model_path = "Jurisight/legal_led"
+model_path = "/app/legal_led_model"
 model = AutoModelForSeq2SeqLM.from_pretrained(model_path)
 tokenizer = AutoTokenizer.from_pretrained(model_path)
+model.save_pretrained("./legal_led_model")
+tokenizer.save_pretrained("./legal_led_model")
 
 model_name = "BAAI/bge-base-en-v1.5"
 embed_model = AutoModel.from_pretrained(model_name)
