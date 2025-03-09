@@ -242,5 +242,4 @@ def fetch_form_data(user_id):
     return jsonify(extracted_data), 200
     
 if __name__ == '__main__':
-    port = int(os.getenv("FLASK_PORT"))
-    serve(app, host="0.0.0.0", port=port)
+    serve(app, host="127.0.0.1", port=3001)

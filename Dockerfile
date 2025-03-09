@@ -22,4 +22,4 @@ COPY . .
 EXPOSE 3000 5000
 
 # Start both Flask and Node.js servers
-CMD ["sh", "-c", "npm start & python3 chatbot.py"]
+CMD ["sh", "-c", "python3 chatbot.py & npm start"]

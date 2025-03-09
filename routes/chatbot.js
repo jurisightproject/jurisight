@@ -5,7 +5,7 @@ const FormData = require("form-data");
 const Chat = require("../models/chat");
 const auth = require("../middleware/auth");
 
-const FLASK_BASE_URL = "http://localhost:5000";
+const FLASK_BASE_URL = "http://localhost:3001";
 
 const chatbotRouter = express.Router();
 const upload = multer();
